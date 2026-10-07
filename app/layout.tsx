@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "react";
+import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
   title: "Fantômes — Débusque les abonnements que tu paies sans t'en servir",
