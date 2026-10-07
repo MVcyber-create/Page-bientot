@@ -90,9 +90,14 @@ export function detecterFantomes(texte: string): Fantome[] | null {
     if (!(montant < 0) || j === null || !desc) continue;
     if (
       iType >= 0 &&
-      !/carte|card|vement|debit|abonn|subscr/.test(normaliser(l[iType] ?? ""))
+      /virement|transfert|transfer|recharg|topup|change|exchange|retrait|atm/.test(
+        normaliser(l[iType] ?? "")
+      )
     )
       continue;
+    if (/^(virement|transfert|transfer|vers |to )/.test(normaliser(desc)))
+      continue;
+
     if (
       iEtat >= 0 &&
       /annul|refus|revert|rejet|declin|fail|attente|pending/.test(
@@ -118,7 +123,7 @@ export function detecterFantomes(texte: string): Fantome[] | null {
   for (const { nom, ops } of groupes.values()) {
     if (ops.length < 3) continue;
     const med = mediane(ops.map((o) => Math.abs(o.montant)));
-    const tolerance = Math.max(0.5, med * 0.1);
+    const tolerance = Math.max(0.3, med * 0.03);
     const stables = ops
       .filter((o) => Math.abs(Math.abs(o.montant) - med) <= tolerance)
       .sort((a, b) => a.jour - b.jour);
